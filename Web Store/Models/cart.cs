@@ -14,6 +14,10 @@ namespace Web_Store.Models
     
     public partial class cart
     {
+        public cart()
+        {
+            this.Quantity = 0;
+        }
         public int Product_idItems { get; set; }
         public int User_idUsers { get; set; }
         public int Quantity { get; set; }
