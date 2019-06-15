@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="webshopModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="8.0" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.webshop.cart' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="cart">
+          <Key>
+            <PropertyRef Name="Product_idItems" />
+            <PropertyRef Name="User_idUsers" />
+            <PropertyRef Name="Quantity" />
+          </Key>
+          <Property Name="Product_idItems" Type="int" Nullable="false" />
+          <Property Name="User_idUsers" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="categories">
+          <Key>
+            <PropertyRef Name="idCategories" />
+          </Key>
+          <Property Name="idCategories" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CatName" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="news">
+          <Key>
+            <PropertyRef Name="idNews" />
+          </Key>
+          <Property Name="idNews" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NewsHeader" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="NewsDesc" Type="varchar" MaxLength="2000" Nullable="false" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="idItems" />
+          </Key>
+          <Property Name="idItems" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemName" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="ItemPrice" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="Categories_idCategories" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sold">
+          <Key>
+            <PropertyRef Name="idSold" />
+          </Key>
+          <Property Name="idSold" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserMail" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="ProductName" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="Price" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="DateSold" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="idUsers" />
+          </Key>
+          <Property Name="idUsers" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Mail" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_Cart_Product1">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="cart" Type="Self.cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="idItems" />
+            </Principal>
+            <Dependent Role="cart">
+              <PropertyRef Name="Product_idItems" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Cart_User1">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="cart" Type="Self.cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="idUsers" />
+            </Principal>
+            <Dependent Role="cart">
+              <PropertyRef Name="User_idUsers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Product_Categories1">
+          <End Role="categories" Type="Self.categories" Multiplicity="1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categories">
+              <PropertyRef Name="idCategories" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="Categories_idCategories" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="webshopModelStoreContainer">
+          <EntitySet Name="categories" EntityType="Self.categories" Schema="webshop" store:Type="Tables" />
+          <EntitySet Name="news" EntityType="Self.news" Schema="webshop" store:Type="Tables" />
+          <EntitySet Name="product" EntityType="Self.product" Schema="webshop" store:Type="Tables" />
+          <EntitySet Name="sold" EntityType="Self.sold" Schema="webshop" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="webshop" store:Type="Tables" />
+          <EntitySet Name="cart" EntityType="Self.cart" store:Type="Tables" store:Schema="webshop">
+            <DefiningQuery>SELECT
+`cart`.`Product_idItems`, 
+`cart`.`User_idUsers`, 
+`cart`.`Quantity`
+FROM `cart` AS `cart`</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="fk_Cart_Product1" Association="Self.fk_Cart_Product1">
+            <End Role="product" EntitySet="product" />
+            <End Role="cart" EntitySet="cart" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Cart_User1" Association="Self.fk_Cart_User1">
+            <End Role="user" EntitySet="user" />
+            <End Role="cart" EntitySet="cart" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Product_Categories1" Association="Self.fk_Product_Categories1">
+            <End Role="categories" EntitySet="categories" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="webshopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="categories">
+          <Key>
+            <PropertyRef Name="idCategories" />
+          </Key>
+          <Property Name="idCategories" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CatName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="product" Relationship="Self.fk_Product_Categories1" FromRole="categories" ToRole="product" />
+        </EntityType>
+        <EntityType Name="news">
+          <Key>
+            <PropertyRef Name="idNews" />
+          </Key>
+          <Property Name="idNews" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NewsHeader" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NewsDesc" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="idItems" />
+          </Key>
+          <Property Name="idItems" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ItemPrice" Type="Decimal" Nullable="false" />
+          <Property Name="Categories_idCategories" Type="Int32" Nullable="false" DefaultValue="1" />
+          <NavigationProperty Name="categories" Relationship="Self.fk_Product_Categories1" FromRole="product" ToRole="categories" />
+          <NavigationProperty Name="cart" Relationship="Self.fk_Cart_Product1" FromRole="product" ToRole="cart" />
+        </EntityType>
+        <EntityType Name="sold">
+          <Key>
+            <PropertyRef Name="idSold" />
+          </Key>
+          <Property Name="idSold" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserMail" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Price" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DateSold" Type="DateTime" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="idUsers" />
+          </Key>
+          <Property Name="idUsers" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Mail" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="cart" Relationship="Self.fk_Cart_User1" FromRole="user" ToRole="cart" />
+        </EntityType>
+        <EntityType Name="cart">
+          <Key>
+            <PropertyRef Name="Product_idItems" />
+            <PropertyRef Name="User_idUsers" />
+            <PropertyRef Name="Quantity" />
+          </Key>
+          <Property Name="Product_idItems" Type="Int32" Nullable="false" />
+          <Property Name="User_idUsers" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" DefaultValue="0" />
+          <NavigationProperty Name="product" Relationship="Self.fk_Cart_Product1" FromRole="cart" ToRole="product" />
+          <NavigationProperty Name="user" Relationship="Self.fk_Cart_User1" FromRole="cart" ToRole="user" />
+        </EntityType>
+        <Association Name="fk_Product_Categories1">
+          <End Role="categories" Type="Self.categories" Multiplicity="1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categories">
+              <PropertyRef Name="idCategories" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="Categories_idCategories" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Cart_Product1">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="cart" Type="Self.cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="idItems" />
+            </Principal>
+            <Dependent Role="cart">
+              <PropertyRef Name="Product_idItems" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Cart_User1">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="cart" Type="Self.cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="idUsers" />
+            </Principal>
+            <Dependent Role="cart">
+              <PropertyRef Name="User_idUsers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="webshopEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="categories" EntityType="Self.categories" />
+          <EntitySet Name="news" EntityType="Self.news" />
+          <EntitySet Name="product" EntityType="Self.product" />
+          <EntitySet Name="sold" EntityType="Self.sold" />
+          <EntitySet Name="user" EntityType="Self.user" />
+          <EntitySet Name="cart" EntityType="Self.cart" />
+          <AssociationSet Name="fk_Product_Categories1" Association="Self.fk_Product_Categories1">
+            <End Role="categories" EntitySet="categories" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Cart_Product1" Association="Self.fk_Cart_Product1">
+            <End Role="product" EntitySet="product" />
+            <End Role="cart" EntitySet="cart" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Cart_User1" Association="Self.fk_Cart_User1">
+            <End Role="user" EntitySet="user" />
+            <End Role="cart" EntitySet="cart" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="webshopModelStoreContainer" CdmEntityContainer="webshopEntities">
+          <EntitySetMapping Name="categories">
+            <EntityTypeMapping TypeName="webshopModel.categories">
+              <MappingFragment StoreEntitySet="categories">
+                <ScalarProperty Name="idCategories" ColumnName="idCategories" />
+                <ScalarProperty Name="CatName" ColumnName="CatName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="news">
+            <EntityTypeMapping TypeName="webshopModel.news">
+              <MappingFragment StoreEntitySet="news">
+                <ScalarProperty Name="idNews" ColumnName="idNews" />
+                <ScalarProperty Name="NewsHeader" ColumnName="NewsHeader" />
+                <ScalarProperty Name="NewsDesc" ColumnName="NewsDesc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="product">
+            <EntityTypeMapping TypeName="webshopModel.product">
+              <MappingFragment StoreEntitySet="product">
+                <ScalarProperty Name="idItems" ColumnName="idItems" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="Categories_idCategories" ColumnName="Categories_idCategories" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sold">
+            <EntityTypeMapping TypeName="webshopModel.sold">
+              <MappingFragment StoreEntitySet="sold">
+                <ScalarProperty Name="idSold" ColumnName="idSold" />
+                <ScalarProperty Name="UserMail" ColumnName="UserMail" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="DateSold" ColumnName="DateSold" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="webshopModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="idUsers" ColumnName="idUsers" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cart">
+            <EntityTypeMapping TypeName="webshopModel.cart">
+              <MappingFragment StoreEntitySet="cart">
+                <ScalarProperty Name="Product_idItems" ColumnName="Product_idItems" />
+                <ScalarProperty Name="User_idUsers" ColumnName="User_idUsers" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

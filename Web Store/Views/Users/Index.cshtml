@@ -1,0 +1,118 @@
+﻿@model IEnumerable<Web_Store.Models.user>
+
+@{
+    Layout = "~/Views/MasterPages/_AdminLayout.cshtml";
+}
+
+
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+<h1 class="text-center">Users</h1>
+<hr />
+<div class="container">
+    <div class="row">
+        <input class="form-control" id="myInput" type="text" placeholder="Search..">
+    </div>
+
+
+</div>
+<h1></h1>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Mail
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Adress
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+
+    <tbody id="myTable">
+        @foreach (var item in Model)
+        {
+            if (item.Status == 999)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mail)
+                    </td>
+                    <td>
+                        -
+                    </td>
+                    <td>
+                        Admin
+                    </td>
+                    <td>
+                        -
+                    </td>
+                    <td>
+                        No Actions
+                    </td>
+                </tr>
+            }
+            else if (item.Status == 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mail)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        Active User
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Disable", "Disable", new { id = item.idUsers })</button>
+                        <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Delete", "Delete", new { id = item.idUsers })</button>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mail)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        Disabled User
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Enable", "Enable", new { id = item.idUsers })</button>
+                        <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Delete", "Delete", new { id = item.idUsers })</button>
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+
+</table>

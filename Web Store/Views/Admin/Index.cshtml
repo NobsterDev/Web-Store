@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Web_Store.Models.news>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/MasterPages/_AdminLayout.cshtml";
+}
+
+
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+
+<h1 class="text-center">News</h1>
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="col-md-10">
+            <input class="form-control" id="myInput" type="text" placeholder="Search..">
+        </div>
+        <div class="col-md-auto">
+            <button type="button" class="btn btn-light">@Html.ActionLink("Create New", "Create")</button>
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Header
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody id="myTable">
+            @foreach (var item in Model)
+            {
+                string str = item.NewsDesc;
+                str =str.Substring(0, Math.Min(str.Length, 50));
+                str = str + "...";
+                string str2 = item.NewsHeader;
+                <tr>
+                    <td>
+                        @Html.ActionLink(str2, "Details", new { id = item.idNews })
+                    </td>
+                    <td>
+                        @str
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Edit", "Edit", new { id = item.idNews })</button>
+                        <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Delete", "Delete", new { id = item.idNews })</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
