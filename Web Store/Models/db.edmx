@@ -29,8 +29,8 @@ warning 6002: The table/view 'def.webshop.cart' does not have a primary key defi
             <PropertyRef Name="idNews" />
           </Key>
           <Property Name="idNews" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NewsHeader" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="NewsDesc" Type="varchar" MaxLength="2000" Nullable="false" />
+          <Property Name="NewsHeader" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="NewsDesc" Type="text" Nullable="false" />
         </EntityType>
         <EntityType Name="product">
           <Key>
@@ -143,8 +143,8 @@ FROM `cart` AS `cart`</DefiningQuery>
             <PropertyRef Name="idNews" />
           </Key>
           <Property Name="idNews" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NewsHeader" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="NewsDesc" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NewsHeader" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NewsDesc" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
         <EntityType Name="product">
           <Key>
@@ -153,7 +153,7 @@ FROM `cart` AS `cart`</DefiningQuery>
           <Property Name="idItems" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ItemPrice" Type="Decimal" Nullable="false" />
-          <Property Name="Categories_idCategories" Type="Int32" Nullable="false" DefaultValue="1" />
+          <Property Name="Categories_idCategories" Type="Int32" Nullable="false" />
           <NavigationProperty Name="categories" Relationship="Self.fk_Product_Categories1" FromRole="product" ToRole="categories" />
           <NavigationProperty Name="cart" Relationship="Self.fk_Cart_Product1" FromRole="product" ToRole="cart" />
         </EntityType>
@@ -188,7 +188,7 @@ FROM `cart` AS `cart`</DefiningQuery>
           </Key>
           <Property Name="Product_idItems" Type="Int32" Nullable="false" />
           <Property Name="User_idUsers" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" DefaultValue="0" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
           <NavigationProperty Name="product" Relationship="Self.fk_Cart_Product1" FromRole="cart" ToRole="product" />
           <NavigationProperty Name="user" Relationship="Self.fk_Cart_User1" FromRole="cart" ToRole="user" />
         </EntityType>

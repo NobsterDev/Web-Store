@@ -11,8 +11,7 @@ namespace Web_Store.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class user
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -20,15 +19,10 @@ namespace Web_Store.Models
         {
             this.cart = new HashSet<cart>();
         }
-        [Display(Name = "Password")]
-        [Required(ErrorMessage = "Password is required")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$",ErrorMessage = "Minimum eight characters, at least one uppercase letter, one lowercase letter and one number")]
-        public string Password { get; set; }
+    
         public int idUsers { get; set; }
-        [Display(Name = "Email address")]
-        [Required(ErrorMessage = "The email address is required")]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Mail { get; set; }
+        public string Password { get; set; }
         public string Name { get; set; }
         public int Status { get; set; }
         public string Address { get; set; }

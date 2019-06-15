@@ -17,7 +17,6 @@ namespace Web_Store.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public product()
         {
-            this.Categories_idCategories = 1;
             this.cart = new HashSet<cart>();
         }
     
