@@ -1,0 +1,16 @@
+﻿@model Web_Store.Models.news
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/MasterPages/_UserLayout.cshtml";
+}
+
+<h1>@Html.DisplayFor(model => model.NewsHeader)</h1>
+<hr />
+<h2>
+    @Html.DisplayFor(model => model.NewsDesc)
+</h2>
+<hr />
+<p>
+    <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Back", "Index")</button>
+</p>

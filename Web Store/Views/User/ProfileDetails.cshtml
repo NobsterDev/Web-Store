@@ -1,0 +1,58 @@
+﻿@model Web_Store.Models.user
+
+@{
+    ViewBag.Title = "ProfileDetails";
+    Layout = "~/Views/MasterPages/_UserLayout.cshtml";
+}
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h3>Profile Details</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.idUsers)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Mail, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="form-control text-box single-line valid" title="Invalid Email Address" id="Mail" pattern="[a-z0-9._%+-]+@('@')[a-z0-9.-]+\.[a-z]{2,}$" name="Mail" type="email" value="@Model.Mail" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="form-control text-box single-line" title="Minimum eight characters, at least one uppercase letter, one lowercase letter and one number" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" id="Password" name="Password" type="text" placeholder="New Password" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="form-control text-box single-line" id="Name" name="Name" type="text" value="@Model.Name" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="form-control text-box single-line" id="Address" name="Address" type="text" value="@Model.Address" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <button type="button" class="btn btn-light">
+                    @Html.ActionLink("Back", "Index")
+                </button>
+            </div>
+        </div>
+    </div>
+}

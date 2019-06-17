@@ -106,6 +106,7 @@ namespace Web_Store.Controllers
                 if (userDetail.Status != 999)
                 {
                     TempData["AlertMessage"] = "Your ip and session has been logged.";
+                    throw new InvalidStateException();
                 }
             }
             else
