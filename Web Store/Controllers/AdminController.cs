@@ -17,6 +17,7 @@ namespace Web_Store.Controllers
         [Route]
         public ActionResult Index()
         {
+            try { auth(); } catch { return Redirect("/"); }
             List<news> nlist = new List<news>();
             nlist = db.news.ToList();
             return View(nlist);
@@ -26,6 +27,7 @@ namespace Web_Store.Controllers
         [Route("Details/{id}")]
         public ActionResult Details(int id)
         {
+            try { auth(); } catch { return Redirect("/"); }
             news news = new news();
             news = db.news.Where(x => x.idNews == id).FirstOrDefault();
             return View(news);
@@ -35,6 +37,7 @@ namespace Web_Store.Controllers
         [Route("Create")]
         public ActionResult Create()
         {
+            try { auth(); } catch { return Redirect("/"); }
             return View(new news());
         }
 
@@ -43,6 +46,7 @@ namespace Web_Store.Controllers
         [HttpPost]
         public ActionResult Create(news news)
         {
+            try { auth(); } catch { return Redirect("/"); }
             try
             {
                 // TODO: Add insert logic here
@@ -62,6 +66,7 @@ namespace Web_Store.Controllers
         [Route("Edit/{id}")]
         public ActionResult Edit(int id)
         {
+            try { auth(); } catch { return Redirect("/"); }
             news news = new news();
             news = db.news.Where(x => x.idNews == id).FirstOrDefault();
             return View(news);
@@ -72,6 +77,7 @@ namespace Web_Store.Controllers
         [HttpPost]
         public ActionResult Edit(int id, news news)
         {
+            try { auth(); } catch { return Redirect("/"); }
             try
             {
                 // TODO: Add update logic here
@@ -94,6 +100,7 @@ namespace Web_Store.Controllers
         [Route("Delete")]
         public ActionResult Delete(int id)
         {
+            try { auth(); } catch { return Redirect("/"); }
             try
             {
                 news news = db.news.Where(x => x.idNews == id).FirstOrDefault();
@@ -108,5 +115,23 @@ namespace Web_Store.Controllers
                 return RedirectToAction("Index");
             }
         }
+        private void auth()
+        {
+            if (Session["user"] != null)
+            {
+                user userDetail = Session["user"] as user;
+                string remember = Session["remember"] as string;
+                if (userDetail.Status != 999)
+                {
+                    TempData["AlertMessage"] = "Your ip and session has been logged.";
+                }
+            }
+            else
+            { 
+                TempData["AlertMessage"] = "You are not logged in";
+                throw new InvalidStateException();
+            }
+        }
+        public class InvalidStateException : Exception { }
     }
 }

@@ -16,6 +16,7 @@ namespace Web_Store.Controllers
         [Route]
         public ActionResult Index()
         {
+            try { auth(); } catch { return Redirect("/"); }
             List<user> ulist = new List<user>();
             ulist = db.user.ToList();
             return View(ulist);
@@ -25,11 +26,12 @@ namespace Web_Store.Controllers
         [Route("Enable")]
         public ActionResult Enable(int id)
         {
+            try { auth(); } catch { return Redirect("/"); }
             try
             {
                 user user = new user();
                 user = db.user.Where(x => x.idUsers == id).FirstOrDefault();
-                user.Status = 0;
+                user.Status = 1;
                 db.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 TempData["AlertMessage"] = "Success";
@@ -46,11 +48,12 @@ namespace Web_Store.Controllers
         [Route("Disable")]
         public ActionResult Disable(int id)
         {
+            try { auth(); } catch { return Redirect("/"); }
             try
             {
                 user user = new user();
                 user = db.user.Where(x => x.idUsers == id).FirstOrDefault();
-                user.Status = 1;
+                user.Status = 0;
                 db.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 TempData["AlertMessage"] = "Success";
@@ -67,6 +70,7 @@ namespace Web_Store.Controllers
         [Route("Delete/{id}")]
         public ActionResult Delete(int id)
         {
+            try { auth(); } catch { return Redirect("/"); }
             user user = new user();
             user = db.user.Where(x => x.idUsers == id).FirstOrDefault();
             return View(user);
@@ -77,6 +81,7 @@ namespace Web_Store.Controllers
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
+            try { auth(); } catch { return Redirect("/"); }
             try
             {
                 user user = db.user.Where(x => x.idUsers == id).FirstOrDefault();
@@ -92,5 +97,23 @@ namespace Web_Store.Controllers
             }
 
         }
+        private void auth()
+        {
+            if (Session["user"] != null)
+            {
+                user userDetail = Session["user"] as user;
+                string remember = Session["remember"] as string;
+                if (userDetail.Status != 999)
+                {
+                    TempData["AlertMessage"] = "Your ip and session has been logged.";
+                }
+            }
+            else
+            {
+                TempData["AlertMessage"] = "You are not logged in";
+                throw new InvalidStateException();
+            }
+        }
+        public class InvalidStateException : Exception { }
     }
 }

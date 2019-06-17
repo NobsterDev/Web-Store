@@ -20,7 +20,7 @@ namespace Web_Store
                 url: "{controller}/{action}/{id}",
                 defaults: new
                 {
-                    controller = "Home",
+                    controller = "HomeController",
                     action = "Index",
                     id = UrlParameter.Optional
                 }

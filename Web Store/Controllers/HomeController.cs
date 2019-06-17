@@ -14,6 +14,24 @@ namespace Web_Store.Controllers
         [Route]
         public ActionResult Index()
         {
+            if(Session["user"]!=null && Session["remember"]!=null)
+            {
+                user userDetail = Session["user"] as user;
+                string remember = Session["remember"] as string;
+                if(remember=="true")
+                {
+                    if (userDetail.Status == 1)
+                    {
+                        Session["User"] = userDetail;
+                        return Redirect("/User");
+                    }
+                    else if (userDetail.Status == 999)
+                    {
+                        Session["User"] = userDetail;
+                        return Redirect("/Admin");
+                    }
+                }
+            }
             return RedirectToAction("Login");
         }
         // GET: register
@@ -29,6 +47,13 @@ namespace Web_Store.Controllers
             return View();
         }
 
+        [Route("Logout")]
+        public ActionResult Logout()
+        {
+            Session["User"]= null;
+            TempData["AlertMessage"] = "Logged Out";
+            return RedirectToAction("Login");
+        }
 
         [Route("Register")]
         [HttpPost]
@@ -37,37 +62,74 @@ namespace Web_Store.Controllers
             try
             {
                 // TODO: Add insert logic here
-                var userDetail = db.user.Where(x => x.Mail == user.Mail && x.Password == user.Password).FirstOrDefault();
-                if (true)
+                user userDetail = db.user.Where(x => x.Mail == user.Mail).FirstOrDefault();
+                if (userDetail != null)
                 {
-                    TempData["AlertMessage"] = "registerpost";
+                    TempData["AlertMessage"] = "User Already Exists";
+                }
+                else
+                {
+                    db.user.Add(user);
+                    db.SaveChanges();
+                    TempData["AlertMessage"] = "Successfully Registered";
                 }
                 return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                TempData["AlertMessage"] = "Failed";
+                return RedirectToAction("Index");
             }
         }
 
 
         [Route("Login")]
         [HttpPost]
-        public ActionResult Login(user user, string password)
+        public ActionResult Login(user user, string password,string remember)
         {
             try
                 {
-                var userDetail = db.user.Where(x => x.Mail == user.Mail && x.Password == user.Password).FirstOrDefault();
+                user userDetail = db.user.Where(x => x.Mail == user.Mail && x.Password == user.Password).FirstOrDefault();
                 // TODO: Add insert logic here
-                if (true)
+                userDetail.Password = "Your ip and session is recorded.";
+                if (userDetail == null)
                 {
-                    TempData["AlertMessage"] = "loginpost";
+                    TempData["AlertMessage"] = "User not found";
+                    return RedirectToAction("Index");
                 }
-                return RedirectToAction("Index");
+                if (userDetail.Status ==1)
+                {
+                    TempData["AlertMessage"] = "Welcome "+user.Name;
+                    Session["User"] = userDetail;
+                    Remember(remember);
+                    return Redirect("/User");
+                }
+                else if (userDetail.Status == 999)
+                {
+                    Session["User"] = userDetail;
+                    Remember(remember);
+                    return Redirect("/Admin");
+                }
+                else
+                {
+                    TempData["AlertMessage"] = "The User Is Disabled. Wait until Admins Enable Your Account.";
+                    return RedirectToAction("Index");
+                }
             }
             catch
             {
                 return View();
+            }
+        }
+        private void Remember(string remember)
+        {
+            if(remember == "on")
+            {
+                Session["remember"] = "true";
+            }
+            else
+            {
+                Session["remember"] = "false";
             }
         }
     }
