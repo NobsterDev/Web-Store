@@ -60,5 +60,19 @@
             @RenderBody()
         </div>
     </div>
+    <hr />
+    <div align="right" style="color:lightblue;margin-right:20px">
+        @{ 
+            string visit = Request.Cookies.Get("counter").Values.Get("visit"); ;
+            string visitedbyme = Request.Cookies.Get("counter").Values.Get("visitedbyme"); ;
+            string users = Request.Cookies.Get("counter").Values.Get("users"); ;
+
+            }
+        
+        Users Number: @users
+        Visitors Number: @visit
+        Visited By You: @visitedbyme
+    </div>
+    <hr />
 </body>
 </html>

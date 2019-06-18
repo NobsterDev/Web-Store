@@ -102,6 +102,35 @@ namespace Web_Store.Controllers
                 }
                 if (userDetail.Status ==1)
                 {
+                    count count = db.count.Where(x => x.iduser == userDetail.idUsers).FirstOrDefault();
+                    if (count == null)
+                    {
+                        count newcount = new count();
+                        string str = "INSERT INTO `webshop`.`count` (`iduser`, `count`) VALUES ('" + userDetail.idUsers + "', '1');";
+                        db.Database.ExecuteSqlCommand(str);
+                    }
+                    else
+                    {
+                        count.count1++;
+                        string str = "UPDATE `webshop`.`count` SET `count` = '"+count.count1+ "' WHERE (`iduser` = '" + userDetail.idUsers + "');";
+                        db.Database.ExecuteSqlCommand(str);
+                    }
+                    int users = db.user.ToList().Count-1;
+                    int visitedbyme = db.count.Where(x => x.iduser == userDetail.idUsers).First().count1;
+                    int visit = 0;
+                    List<count> lvisit = db.count.ToList();
+                    foreach (var item in lvisit)
+                    {
+                        visit += item.count1;
+                    }
+                    DateTime now = DateTime.Now;
+
+                    HttpCookie ck = new HttpCookie("counter");
+                    ck.Expires.AddYears(30);
+                    ck.Values.Add("visit", visit.ToString());
+                    ck.Values.Add("visitedbyme", visitedbyme.ToString());
+                    ck.Values.Add("users", users.ToString());
+                    Response.Cookies.Add(ck);
                     TempData["AlertMessage"] = "Welcome "+user.Name;
                     Session["User"] = userDetail;
                     Remember(remember);
@@ -121,7 +150,6 @@ namespace Web_Store.Controllers
             }
             catch
             {
-                throw;
                 return View();
             }
         }
