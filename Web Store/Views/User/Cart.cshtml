@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Web_Store.Models.product>
+
+@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/MasterPages/_UserLayout.cshtml";
+}
+
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+
+<h1 class="text-center">Products</h1>
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <input class="form-control" id="myInput" type="text" placeholder="Search..">
+        </div>
+    </div>
+
+
+</div>
+<h1></h1>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">
+                ID
+            </th>
+            <th scope="col">
+                Item Names
+            </th>
+            <th scope="col">
+                Item Prices
+            </th>
+            <th scope="col">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody id="myTable">
+        @foreach (var item in Model)
+        {
+            List<string> quantity = TempData["qu"] as List<string>;
+
+            <tr>
+                <th scope="row">
+                    @Html.DisplayFor(modelItem => item.idItems)
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemPrice)
+                </td>
+                <td>
+                    <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Delete From Cart", "DeleteCart", new { id = item.idItems })</button>
+
+
+
+
+
+                    <div class="Container" style="padding-top: 60px;" method="POST">
+                        <form action="/User/ChangeCart/@item.idItems" method="POST">
+                            <input type="number" name="quantity" min="1" max="20" value="@quantity[a]" required>
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">+</button>
+                        </form>
+                    </div>
+
+
+
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>

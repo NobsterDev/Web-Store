@@ -91,7 +91,10 @@ namespace Web_Store.Controllers
                 {
                 user userDetail = db.user.Where(x => x.Mail == user.Mail && x.Password == user.Password).FirstOrDefault();
                 // TODO: Add insert logic here
-                userDetail.Password = "Your ip and session is recorded.";
+                if (userDetail!= null)
+                {
+                    userDetail.Password = "Your ip and session is recorded.";
+                }
                 if (userDetail == null)
                 {
                     TempData["AlertMessage"] = "User not found";
@@ -118,6 +121,7 @@ namespace Web_Store.Controllers
             }
             catch
             {
+                throw;
                 return View();
             }
         }

@@ -47,9 +47,89 @@ namespace Web_Store.Controllers
         public ActionResult ProfileDetails(user user)
         {
             try { auth(); } catch { return Redirect("/"); }
-            //?
-            return RedirectToAction("Index");
+            try
+            {
+                db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                TempData["AlertMessage"] = "Changes Saved, Wait for approval";
+                return Redirect("/");
+            }
+            catch (Exception)
+            {
+                TempData["AlertMessage"] = "Failed";
+                return RedirectToAction("Profile");
+            }
         }
+
+        // GET: Product/Edit/5
+        [Route("Cart")]
+        public ActionResult Cart()
+        {
+            try { auth(); } catch { return Redirect("/"); }
+            user tmpuser = Session["user"] as user;  
+            List<cart> cl = db.cart.Where(x => x.User_idUsers == tmpuser.idUsers).ToList();
+            List<product> pl = db.product.ToList();
+            List<product> result = new List<product>();
+            List<string> result1 = new List<string>();
+            foreach (var c in cl)
+            {
+                foreach (var p in pl)
+                {
+                    if (c.Product_idItems == p.idItems)
+                    {
+                        result.Add(p);
+                        result1.Add(c.Quantity.ToString());
+                    }
+                }
+            }
+            TempData["qu"] = result1;
+            return View(result);
+        }
+
+        // GET: Product/Edit/5
+        [Route("DeleteCart/{id}")]
+        public ActionResult DeleteFromCart(int id)
+        {
+            try { auth(); } catch { return Redirect("/"); }
+            try
+            {
+                user tmpuser = Session["user"] as user;
+                cart cart = db.cart.Where(x => x.Product_idItems == id && x.User_idUsers == tmpuser.idUsers).First();
+                string str= "Delete From `webshop`.`cart` WHERE (`Product_idItems` = '" + id + "');";
+                db.Database.ExecuteSqlCommand(str);
+                TempData["AlertMessage"] = "Success";
+                return RedirectToAction("Cart");
+            }
+            catch
+            {
+                TempData["AlertMessage"] = "Failed";
+                return RedirectToAction("Cart");
+            }
+        }
+        // GET: Product/Edit/5
+        [Route("ChangeCart/{id}")]
+        [HttpPost]
+        public ActionResult ChangeCart(int id,string quantity)
+        {
+            try { auth(); } catch { return Redirect("/"); }
+            try
+            {
+                user tmpuser = Session["user"] as user;
+                string str = "UPDATE `webshop`.`cart` SET `Quantity` = '" + quantity + "' WHERE (`Product_idItems` = '" + id + "');";
+                db.Database.ExecuteSqlCommand(str);
+                TempData["AlertMessage"] = "Success";
+                return RedirectToAction("Cart");
+            }
+            catch
+            {
+                TempData["AlertMessage"] = "Failed";
+                return RedirectToAction("Cart");
+            }
+        }
+
+
+
+
 
         // GET: Product
         [Route("Products")]
@@ -84,15 +164,10 @@ namespace Web_Store.Controllers
         public ActionResult Addtocart(int id)
         {
             try { auth(); } catch { return Redirect("/"); }
+            user user = Session["user"] as user;
             try
             {
-                cart cart = new cart();
-                user tmpuser = Session["user"] as user;
-                cart.User_idUsers = tmpuser.idUsers;
-                cart.Product_idItems = id;
-                cart.Quantity = 0;
-                db.cart.Add(cart);
-                db.SaveChanges();
+                db.Database.ExecuteSqlCommand("INSERT INTO `webshop`.`cart` VALUES ("+id+","+user.idUsers+",0);");
                 TempData["AlertMessage"] = "Success";
                 return RedirectToAction("Products");
             }
