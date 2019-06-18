@@ -23,6 +23,23 @@ namespace Web_Store.Controllers
             return View(nlist);
         }
 
+        [Route("Sold")]
+        public ActionResult Sold()
+        {
+            try { auth(); } catch { return Redirect("/"); }
+            List<sold> nlist = new List<sold>();
+            nlist = db.sold.ToList();
+            if (nlist.Count == 0)
+            {
+                TempData["AlertMessage"] = "There is no Item on Sold. No one bought items :(";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(nlist);
+            }
+        }
+
         // GET: Admin/Details/5
         [Route("Details/{id}")]
         public ActionResult Details(int id)

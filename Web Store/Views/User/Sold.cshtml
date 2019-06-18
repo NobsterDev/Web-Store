@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Web_Store.Models.sold>
+
+@{
+    ViewBag.Title = "Sold";
+    Layout = "~/Views/MasterPages/_UserLayout.cshtml";
+}
+
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <input class="form-control" id="myInput" type="text" placeholder="Search..">
+        </div>
+    </div>
+    <hr />
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    User Mail
+                </th>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Product Price
+                </th>
+                <th>
+                    Date Of Sold
+                </th>
+                <th>
+                    User Address
+                </th>
+            </tr>
+        </thead>
+        <tbody id="myTable">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserMail)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateSold)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

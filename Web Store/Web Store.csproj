@@ -284,6 +284,8 @@
     <Content Include="Views\User\ProfileDetails.cshtml" />
     <Content Include="Views\User\Products.cshtml" />
     <Content Include="Views\User\Cart.cshtml" />
+    <Content Include="Views\User\Sold.cshtml" />
+    <Content Include="Views\Admin\Sold.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

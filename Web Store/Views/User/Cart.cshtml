@@ -105,7 +105,10 @@
         <div class="col align-self-start">
         </div>
         <div class="col align-self-center">
-            <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Proceed to Checkout ("+total+" USD)", "buy")</button>
+            @if (total != 0)
+            {
+                <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Proceed to Checkout (" + total + " USD)", "buy")</button>
+            }
         </div>
         <div class="col align-self-end">
             

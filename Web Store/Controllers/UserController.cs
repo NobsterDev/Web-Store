@@ -23,6 +23,24 @@ namespace Web_Store.Controllers
             return View(nlist);
         }
 
+        [Route("Sold")]
+        public ActionResult Sold()
+        {
+            try { auth(); } catch { return Redirect("/"); }
+            user tmpuser = Session["user"] as user;
+            List<sold> nlist = new List<sold>();
+            nlist = db.sold.Where(x=> x.UserMail == tmpuser.Mail).ToList();
+            if (nlist.Count==0)
+            {
+                TempData["AlertMessage"] = "There is no Item on Sold. Are you sure that you Bought items?";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(nlist);
+            }
+        }
+
         // GET: User/Details/5
         [Route("Details/{id}")]
         public ActionResult Details(int id)
@@ -82,12 +100,21 @@ namespace Web_Store.Controllers
                     }
                 }
             }
-            TempData["qu"] = result1;
-            return View(result);
+            if (result.Count==0)
+            {
+                TempData["AlertMessage"] = "There is no Item on cart. Maybe you didnt added them to cart?";
+                return RedirectToAction("Products");
+            }
+            else
+            {
+                TempData["qu"] = result1;
+                return View(result);
+            }
+            
         }
         // GET: Product/Edit/5
         [Route("Buy")]
-        public ActionResult Buy(int id)
+        public ActionResult Buy()
         {
             try { auth(); } catch { return Redirect("/"); }
             try
@@ -96,11 +123,11 @@ namespace Web_Store.Controllers
                 List<cart> cart = db.cart.Where(x=> x.User_idUsers == tmpuser.idUsers).ToList();
                 foreach (var item in cart)
                 {
-                    string str = "Delete From `webshop`.`cart` WHERE (`Product_idItems` = '" + id + "');";
+                    string str = "Delete From `webshop`.`cart` WHERE (`Product_idItems` = '" + item.Product_idItems + "');";
                     db.Database.ExecuteSqlCommand(str);
                 }
                 TempData["AlertMessage"] = "Successfully Bought. Please Check your Email For Payment And Your Full Address.";
-                return RedirectToAction("Cart");
+                return RedirectToAction("Sold");
             }
             catch
             {
@@ -180,7 +207,16 @@ namespace Web_Store.Controllers
             {
                 plist.Remove(item);
             }
-            return View(plist);
+
+            if (plist.Count == 0)
+            {
+                TempData["AlertMessage"] = "There is no Item on products. Maybe you added them to cart?";
+                return RedirectToAction("cart");
+            }
+            else
+            {
+                return View(plist);
+            }
         }
 
         // GET: addcart
