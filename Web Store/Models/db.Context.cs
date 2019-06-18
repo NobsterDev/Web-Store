@@ -26,6 +26,7 @@ namespace Web_Store.Models
         }
     
         public virtual DbSet<categories> categories { get; set; }
+        public virtual DbSet<count> count { get; set; }
         public virtual DbSet<news> news { get; set; }
         public virtual DbSet<product> product { get; set; }
         public virtual DbSet<sold> sold { get; set; }

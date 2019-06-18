@@ -24,6 +24,13 @@ warning 6002: The table/view 'def.webshop.cart' does not have a primary key defi
           <Property Name="idCategories" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CatName" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
+        <EntityType Name="count">
+          <Key>
+            <PropertyRef Name="iduser" />
+          </Key>
+          <Property Name="iduser" Type="int" Nullable="false" />
+          <Property Name="count" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="news">
           <Key>
             <PropertyRef Name="idNews" />
@@ -101,6 +108,7 @@ warning 6002: The table/view 'def.webshop.cart' does not have a primary key defi
         </Association>
         <EntityContainer Name="webshopModelStoreContainer">
           <EntitySet Name="categories" EntityType="Self.categories" Schema="webshop" store:Type="Tables" />
+          <EntitySet Name="count" EntityType="Self.count" Schema="webshop" store:Type="Tables" />
           <EntitySet Name="news" EntityType="Self.news" Schema="webshop" store:Type="Tables" />
           <EntitySet Name="product" EntityType="Self.product" Schema="webshop" store:Type="Tables" />
           <EntitySet Name="sold" EntityType="Self.sold" Schema="webshop" store:Type="Tables" />
@@ -137,6 +145,13 @@ FROM `cart` AS `cart`</DefiningQuery>
           <Property Name="idCategories" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CatName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="product" Relationship="Self.fk_Product_Categories1" FromRole="categories" ToRole="product" />
+        </EntityType>
+        <EntityType Name="count">
+          <Key>
+            <PropertyRef Name="iduser" />
+          </Key>
+          <Property Name="iduser" Type="Int32" Nullable="false" />
+          <Property Name="count1" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="news">
           <Key>
@@ -230,6 +245,7 @@ FROM `cart` AS `cart`</DefiningQuery>
         </Association>
         <EntityContainer Name="webshopEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="categories" EntityType="Self.categories" />
+          <EntitySet Name="count" EntityType="Self.count" />
           <EntitySet Name="news" EntityType="Self.news" />
           <EntitySet Name="product" EntityType="Self.product" />
           <EntitySet Name="sold" EntityType="Self.sold" />
@@ -259,6 +275,14 @@ FROM `cart` AS `cart`</DefiningQuery>
               <MappingFragment StoreEntitySet="categories">
                 <ScalarProperty Name="idCategories" ColumnName="idCategories" />
                 <ScalarProperty Name="CatName" ColumnName="CatName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="count">
+            <EntityTypeMapping TypeName="webshopModel.count">
+              <MappingFragment StoreEntitySet="count">
+                <ScalarProperty Name="iduser" ColumnName="iduser" />
+                <ScalarProperty Name="count1" ColumnName="count" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
