@@ -227,7 +227,8 @@ namespace Web_Store.Controllers
             user user = Session["user"] as user;
             try
             {
-                db.Database.ExecuteSqlCommand("INSERT INTO `webshop`.`cart` VALUES ("+id+","+user.idUsers+",0);");
+                string str = "INSERT INTO `webshop`.`cart` VALUES (" + id + "," + user.idUsers + ",0);";
+                db.Database.ExecuteSqlCommand(str);
                 TempData["AlertMessage"] = "Success";
                 return RedirectToAction("Products");
             }
