@@ -85,7 +85,29 @@ namespace Web_Store.Controllers
             TempData["qu"] = result1;
             return View(result);
         }
-
+        // GET: Product/Edit/5
+        [Route("Buy")]
+        public ActionResult Buy(int id)
+        {
+            try { auth(); } catch { return Redirect("/"); }
+            try
+            {
+                user tmpuser = Session["user"] as user;
+                List<cart> cart = db.cart.Where(x=> x.User_idUsers == tmpuser.idUsers).ToList();
+                foreach (var item in cart)
+                {
+                    string str = "Delete From `webshop`.`cart` WHERE (`Product_idItems` = '" + id + "');";
+                    db.Database.ExecuteSqlCommand(str);
+                }
+                TempData["AlertMessage"] = "Successfully Bought. Please Check your Email For Payment And Your Full Address.";
+                return RedirectToAction("Cart");
+            }
+            catch
+            {
+                TempData["AlertMessage"] = "Failed";
+                return RedirectToAction("Cart");
+            }
+        }
         // GET: Product/Edit/5
         [Route("DeleteCart/{id}")]
         public ActionResult DeleteFromCart(int id)
@@ -95,7 +117,9 @@ namespace Web_Store.Controllers
             {
                 user tmpuser = Session["user"] as user;
                 cart cart = db.cart.Where(x => x.Product_idItems == id && x.User_idUsers == tmpuser.idUsers).First();
-                string str= "Delete From `webshop`.`cart` WHERE (`Product_idItems` = '" + id + "');";
+                string str = "UPDATE `webshop`.`cart` SET `Quantity` = '0' WHERE (`Product_idItems` = '"+id+"');";
+                db.Database.ExecuteSqlCommand(str);
+                str= "Delete From `webshop`.`cart` WHERE (`Product_idItems` = '" + id + "');";
                 db.Database.ExecuteSqlCommand(str);
                 TempData["AlertMessage"] = "Success";
                 return RedirectToAction("Cart");

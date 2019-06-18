@@ -41,44 +41,74 @@
                 Item Prices
             </th>
             <th scope="col">
+                Change Quantity
+            </th>
+            <th scope="col">
+                Price
+            </th>
+            <th scope="col">
                 Actions
             </th>
+
         </tr>
     </thead>
     <tbody id="myTable">
+        @{ 
+            int a = 0;
+            decimal total = 0;
+        }
         @foreach (var item in Model)
         {
             List<string> quantity = TempData["qu"] as List<string>;
 
-            <tr>
-                <th scope="row">
-                    @Html.DisplayFor(modelItem => item.idItems)
-                </th>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ItemName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ItemPrice)
-                </td>
-                <td>
-                    <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Delete From Cart", "DeleteCart", new { id = item.idItems })</button>
-
-
-
-
-
-                    <div class="Container" style="padding-top: 60px;" method="POST">
+        <tr>
+            <th scope="row">
+                @Html.DisplayFor(modelItem => item.idItems)
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemPrice)
+            </td>
+            <td>
+                <div class="container">
+                    <div class="row">
                         <form action="/User/ChangeCart/@item.idItems" method="POST">
-                            <input type="number" name="quantity" min="1" max="20" value="@quantity[a]" required>
-                            <button type="submit" class="btn btn-primary btn-lg btn-block">+</button>
+                            <input type="number" style="width:40px" name="quantity" min="1" max="99" value="@quantity[a++]" required>
+                            <button type="submit" class="btn btn-primary">Change</button>
                         </form>
                     </div>
+                </div>
 
 
+            </td>
+            <td>
+                @{ 
+                    total += item.ItemPrice * Convert.ToInt32(quantity[a - 1]);
+                }
+                @(item.ItemPrice * Convert.ToInt32(quantity[a - 1])) USD
+            </td>
+            <td>
+                <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Delete From Cart", "DeleteCart", new { id = item.idItems })</button>   
+            </td>
 
-                </td>
-            </tr>
+        </tr>
 
         }
     </tbody>
 </table>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col align-self-start">
+        </div>
+        <div class="col align-self-center">
+            <button type="button" class="btn btn-outline-primary">@Html.ActionLink("Proceed to Checkout ("+total+" USD)", "buy")</button>
+        </div>
+        <div class="col align-self-end">
+            
+        </div>
+    </div>
+</div>
